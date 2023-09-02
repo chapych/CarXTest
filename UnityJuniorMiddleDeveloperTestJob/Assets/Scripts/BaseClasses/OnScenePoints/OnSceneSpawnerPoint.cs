@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Infrastructure.BaseClasses.OnScenePoints
+namespace BaseClasses.OnScenePoints
 {
     public class OnSceneSpawnerPoint : MonoBehaviour
     {
-        
+        public float Interval;
+        public GameObject MoveTarget;
     }
 }

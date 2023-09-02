@@ -1,8 +1,11 @@
 ﻿using Infrastructure.GameBootstrapper;
 using Infrastructure.GameStateMachine;
+using Infrastructure.Services.AssetProviderService;
+using Infrastructure.Services.GameFactory;
 using Infrastructure.Services.SceneLoader;
 using Infrastructure.Services.SceneLoaderService;
 using Infrastructure.Services.StaticData;
+using Infrastructure.Services.StaticDataService;
 using Zenject;
 
 namespace Bindings
@@ -14,7 +17,23 @@ namespace Bindings
             BindGame();
             BindSceneLoader();
             BindGameStateMachine();
+            BindAssetProvider();
             BindStaticDataService();
+            BindGameFactory();
+        }
+
+        private void BindGameFactory()
+        {
+            Container.Bind<IGameFactory>()
+                .To<GameFactory>()
+                .AsSingle();
+        }
+
+        private void BindAssetProvider()
+        {
+            Container.Bind<IAssetProvider>()
+                .To<AssetProvider>()
+                .AsSingle();
         }
 
         private void BindStaticDataService()

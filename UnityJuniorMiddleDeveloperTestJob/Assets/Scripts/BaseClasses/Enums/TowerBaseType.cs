@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Infrastructure.Services.StaticData
+﻿namespace BaseClasses.Enums
 {
     public enum TowerBaseType
     {

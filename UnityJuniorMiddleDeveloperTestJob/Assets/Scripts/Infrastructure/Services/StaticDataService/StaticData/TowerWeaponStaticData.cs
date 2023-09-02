@@ -1,0 +1,13 @@
+﻿using Infrastructure.Services.StaticData;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+
+namespace Infrastructure.Services.StaticDataService.StaticData
+{
+    [CreateAssetMenu(fileName = "New Tower Weapon Static Data", menuName = "Static Data/Tower Weapon Static Data")]
+    public class TowerWeaponStaticData : ScriptableObject
+    {
+        public WeaponType Type;
+        public AssetReferenceGameObject PrefabReference;
+    }
+}
