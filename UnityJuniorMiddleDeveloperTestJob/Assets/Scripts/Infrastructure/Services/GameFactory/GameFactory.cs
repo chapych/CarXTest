@@ -16,8 +16,10 @@ namespace Infrastructure.Services.GameFactory
     {
         private readonly IStaticDataService staticDataService;
         private readonly IAssetProvider assetProvider;
-        private float height = Constants.HEIGHT;
+
         private List<TriggerObserver> toUnsubscribe = new List<TriggerObserver>();
+        private float weaponHeight = Constants.WEAPON_HEIGHT;
+        private float spawnerHeight = Constants.SPAWNER_HEIGHT;
 
         public GameFactory(IStaticDataService staticDataService, IAssetProvider assetProvider)
         {
@@ -27,7 +29,7 @@ namespace Infrastructure.Services.GameFactory
 
         public async Task<GameObject> CreateTower(TowerBaseType towerBaseType, WeaponType weaponType, Vector3 at, float range, float shootInterval)
         {
-            Vector3 shift = height * Vector3.up;
+            Vector3 shift = weaponHeight * Vector3.up;
             AssetReferenceGameObject towerBaseData = staticDataService.ForTowerBase(towerBaseType).PrefabReference;
             AssetReferenceGameObject weaponData = staticDataService.ForTowerWeapon(weaponType).PrefabReference;
 
@@ -51,8 +53,7 @@ namespace Infrastructure.Services.GameFactory
         private void ConstructWeapon(GameObject weapon, float range, float shootInterval)
         {
             var canon = weapon.GetComponent<IObserverInRange>();
-            canon.Range = range;
-            canon.ShootInterval = shootInterval;
+            canon.Construct(shootInterval);
 
             var triggerObserver = weapon.GetComponentInChildren<TriggerObserver>();
             triggerObserver.Radius = range;
@@ -61,17 +62,16 @@ namespace Infrastructure.Services.GameFactory
             toUnsubscribe.Add(triggerObserver);
         }
 
-        public async Task<GameObject> CreateSpawner(Vector3 at, float interval, Vector3 moveTargetPosition)
+        public async Task<GameObject> CreateSpawner(Vector3 at, float interval, Vector3 moveTargetPosition,
+                                                    float speed, int maxHp)
         {
             var prefab = await assetProvider.Load<GameObject>(AssetAddresses.SPAWNER);
-            var spawner = prefab.GetComponent<ISpawner>();
-            var target = new GameObject();
+            Vector3 spawnerShift = spawnerHeight * Vector3.up;
+            GameObject instantiated = Object.Instantiate(prefab, at + spawnerShift, Quaternion.identity);
+            var spawner = instantiated.GetComponent<ISpawner>();
 
-            target.transform.position = moveTargetPosition;
-            spawner.Interval = interval;
-            spawner.MoveTarget = target;
-
-            return Object.Instantiate(prefab, at, Quaternion.identity);
+            spawner.Construct(interval, moveTargetPosition, speed, maxHp);
+            return instantiated;
         }
 
         public void CleanUp()

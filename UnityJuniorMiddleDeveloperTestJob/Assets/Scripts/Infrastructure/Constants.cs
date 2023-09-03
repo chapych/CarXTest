@@ -2,6 +2,7 @@
 {
     public static class Constants
     {
-        public const float HEIGHT = 3.48f;
+        public const float SPAWNER_HEIGHT = 1f;
+        public const float WEAPON_HEIGHT = 3.48f;
     }
 }

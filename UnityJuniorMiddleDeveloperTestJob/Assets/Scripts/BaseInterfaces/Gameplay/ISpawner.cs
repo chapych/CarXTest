@@ -4,8 +4,8 @@ namespace BaseInterfaces.Gameplay
 {
     public interface ISpawner
     {
-        float Interval { get; set; }
-        GameObject MoveTarget { get; set; }
+        void Construct(float interval, Vector3 moveTargetPosition, float speed, int maxHP);
+        void WarmUp();
         void Spawn();
     }
 }

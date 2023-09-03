@@ -12,7 +12,7 @@ namespace BaseClasses.OnScenePoints
         public float ShootInterval;
         public float Range;
 
-        private float height = Constants.HEIGHT;
+        private float height = Constants.WEAPON_HEIGHT;
 
         private void OnDrawGizmos()
         {

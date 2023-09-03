@@ -52,7 +52,7 @@ namespace Infrastructure.GameStateMachine.States
 
             foreach (SpawnerPoint spawner in forLevel.SpawnerPoints)
             {
-                factory.CreateSpawner(spawner.Position, spawner.Interval, spawner.MoveTargetPosition);
+                factory.CreateSpawner(spawner.Position, spawner.Interval, spawner.MoveTargetPosition, spawner.Speed, spawner.MaxHP);
             }
         }
 
