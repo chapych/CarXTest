@@ -27,7 +27,7 @@ namespace Logic
 			stopWatch = new StopWatch(interval);
 		}
 
-		public void WarmUp() => pool.AddObjects(1);
+		private void Start() => pool.AddObjects(1);
 
 		private void Update()
 		{
@@ -46,7 +46,6 @@ namespace Logic
 		{
 			newMonster.Construct(target, speed, maxHP);
 			newMonster.transform.position = transform.position;
-			Debug.Log(newMonster.GetComponent<Rigidbody>().velocity);
 		}
 
 		private GameObject CreateTargetFor(Monster monster)
