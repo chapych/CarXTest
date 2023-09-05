@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Logic
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class Monster : MonoBehaviour, IPoolable<Monster>
+	public class Monster : MonoBehaviour, IPoolable<Monster>, IDamageable
 	{
 		const float REACH_DISTANCE = 0.3f;
 
@@ -42,6 +42,11 @@ namespace Logic
 			rigidbody.MovePosition(newPosition);
 
 			bool IsCloseToTarget() => Vector3.Distance (transform.position, moveTargetPosition) <= REACH_DISTANCE;
+		}
+
+		public bool IsDead()
+		{
+			return m_hp <= 0;
 		}
 
 		public void GetDamage(int amount)

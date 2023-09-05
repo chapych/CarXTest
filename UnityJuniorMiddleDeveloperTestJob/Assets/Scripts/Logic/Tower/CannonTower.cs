@@ -1,16 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
-using Logic;
-using Logic.Tower;
+﻿using Logic.Tower.Base;
+using UnityEngine;
 
-public class CannonTower : TowerBase
+namespace Logic.Tower
 {
-	public Transform m_shootPoint;
-
-	protected override void Shoot(GameObject target)
+	public class CannonTower : TowerBase
 	{
-		var projectile = pool.Get() as CannonProjectile;
+		[SerializeField] private Transform m_shootPoint;
 
-		Instantiate(m_projectilePrefab, m_shootPoint.position, m_shootPoint.rotation);
+		protected override void Shoot(IDamageable target)
+		{
+			ProjectileBase projectile = pool.Get();
+
+			Transform projectileTransform = projectile.transform;
+			projectileTransform.position = m_shootPoint.position;
+			projectileTransform.rotation = m_shootPoint.rotation;
+
+
+		}
 	}
 }

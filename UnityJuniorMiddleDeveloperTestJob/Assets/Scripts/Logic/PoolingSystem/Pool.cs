@@ -34,7 +34,7 @@ namespace Logic.PoolingSystem
             for (int i = 0; i < count; i++)
             {
                 T instance = Object.Instantiate(prefab);
-                queue.Enqueue(instance);
+                ReturnToPool(instance);
 
                 instance.GetComponent<IPoolable<T>>().OnFree += ReturnToPool;
             }

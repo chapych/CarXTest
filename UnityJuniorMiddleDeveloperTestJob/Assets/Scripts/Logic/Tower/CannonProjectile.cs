@@ -2,6 +2,7 @@
 using System.Collections;
 using Logic;
 using Logic.Tower;
+using Logic.Tower.Base;
 
 public class CannonProjectile : ProjectileBase
 {
