@@ -7,11 +7,18 @@ namespace Logic.Tower.Base
     public class ProjectileBase : MonoBehaviour, IPoolable<ProjectileBase>
     {
         private TriggerObserver triggerObserver;
-        public float m_speed = 0.2f;
-        public int m_damage = 10;
-        public IDamageable m_target;
+        protected float m_speed;
+        protected int m_damage;
+        protected IDamageable m_target;
         public event Action<ProjectileBase> OnFree;
 
+        public void Construct(float speed, int damage, IDamageable target)
+        {
+            m_speed = speed;
+            m_damage = damage;
+            m_target = target;
+        }
+        
         private void Awake()
         {
             triggerObserver = GetComponent<TriggerObserver>();

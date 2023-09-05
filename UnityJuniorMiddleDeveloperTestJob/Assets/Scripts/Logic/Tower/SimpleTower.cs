@@ -12,9 +12,9 @@ namespace Logic
 			// GameObject projectile =
 			// 	Instantiate(m_projectilePrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
 			// var projectileBeh = projectile.GetComponent<GuidedProjectile>();
-			var projectile = pool.Get() as GuidedProjectile;
+			var projectile = projectilePool.Get() as GuidedProjectile;
 			projectile.transform.position = transform.position + Vector3.up * 1.5f;
-			projectile.m_target = target;
+			projectile.Construct(speed, damage, target);
 		}
 	}
 }

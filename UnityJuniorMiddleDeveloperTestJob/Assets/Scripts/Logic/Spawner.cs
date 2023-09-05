@@ -40,6 +40,7 @@ namespace Logic
 			if (!moveTarget)
 				moveTarget = CreateTargetFor(newMonster);
 			ConfigureMonster(newMonster, moveTarget);
+			newMonster.SetMovement();
 		}
 
 		private void ConfigureMonster(Monster newMonster, GameObject target)

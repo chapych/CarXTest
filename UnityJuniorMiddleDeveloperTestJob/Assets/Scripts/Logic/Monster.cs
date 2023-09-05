@@ -35,13 +35,19 @@ namespace Logic
 			Vector3 moveTargetPosition = moveTarget.transform.position;
 			if (IsCloseToTarget())
 			{
+				rigidbody.velocity = Vector3.zero;
+				rigidbody.angularVelocity = Vector3.zero;
+
 				OnFree?.Invoke(this);
-				return;
 			}
-			Vector3 newPosition = Vector3.MoveTowards(transform.position, moveTargetPosition, speed);
-			rigidbody.MovePosition(newPosition);
 
 			bool IsCloseToTarget() => Vector3.Distance (transform.position, moveTargetPosition) <= REACH_DISTANCE;
+		}
+
+		public void SetMovement()
+		{
+			Vector3 moveDirection = moveTarget.transform.position - transform.position;
+			rigidbody.AddForce(speed * moveDirection.normalized, ForceMode.VelocityChange);
 		}
 
 		public bool IsDead()

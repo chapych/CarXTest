@@ -9,5 +9,7 @@ namespace Infrastructure.Services.StaticDataService.StaticData
     {
         public WeaponType Type;
         public AssetReferenceGameObject PrefabReference;
+        public float ProjectileSpeed = 0.2f;
+        public int ProjectileDamage = 10;
     }
 }

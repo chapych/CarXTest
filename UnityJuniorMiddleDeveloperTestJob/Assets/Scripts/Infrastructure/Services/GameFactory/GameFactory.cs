@@ -7,9 +7,9 @@ using Infrastructure.Services.StaticData;
 using Infrastructure.Services.StaticDataService;
 using Logic;
 using Logic.Tower;
+using Logic.Tower.Base;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-
 namespace Infrastructure.Services.GameFactory
 {
     public class GameFactory : IGameFactory
@@ -27,7 +27,8 @@ namespace Infrastructure.Services.GameFactory
             this.assetProvider = assetProvider;
         }
 
-        public async Task<GameObject> CreateTower(TowerBaseType towerBaseType, WeaponType weaponType, Vector3 at, float range, float shootInterval)
+        public async Task<GameObject> CreateTower(TowerBaseType towerBaseType, WeaponType weaponType, Vector3 at,
+            float range, float shootInterval)
         {
             Vector3 shift = weaponHeight * Vector3.up;
             AssetReferenceGameObject towerBaseData = staticDataService.ForTowerBase(towerBaseType).PrefabReference;
@@ -38,7 +39,8 @@ namespace Infrastructure.Services.GameFactory
 
             GameObject towerBase = Object.Instantiate(towerBasePrefab, at, Quaternion.identity);
             GameObject weapon = InstantiateAsChild(weaponPrefab, towerBase, shift);
-            ConstructWeapon(weapon, range, shootInterval);
+            ConstructWeapon(weapon, range, shootInterval, staticDataService.ForTowerWeapon(weaponType).ProjectileSpeed,
+                staticDataService.ForTowerWeapon(weaponType).ProjectileDamage);
 
             return towerBase;
         }
@@ -50,10 +52,11 @@ namespace Infrastructure.Services.GameFactory
             return weapon;
         }
 
-        private void ConstructWeapon(GameObject weapon, float range, float shootInterval)
+        private void ConstructWeapon(GameObject weapon, float range, float shootInterval, float projectileSpeed,
+            int projectileDamage)
         {
-            var canon = weapon.GetComponent<IObserverInRange>();
-            canon.Construct(shootInterval);
+            var canon = weapon.GetComponent<TowerBase>();
+            canon.Construct(shootInterval, projectileSpeed, projectileDamage);
 
             var triggerObserver = weapon.GetComponentInChildren<TriggerObserver>();
             triggerObserver.Radius = range;

@@ -6,17 +6,22 @@ namespace Logic.Tower.Base
     public abstract class TowerBase : MonoBehaviour, IObserverInRange
     {
         [SerializeField] protected ProjectileBase m_projectilePrefab;
-        private StopWatch stopWatch;
-        protected Pool<ProjectileBase> pool;
+        protected Pool<ProjectileBase> projectilePool;
+        protected float speed;
+        protected int damage;
 
-        public void Construct(float interval)
+        private StopWatch stopWatch;
+
+        public void Construct(float interval, float speed, int damage)
         {
             stopWatch = new StopWatch(interval);
+            this.speed = speed;
+            this.damage = damage;
 
-            pool = new Pool<ProjectileBase>(m_projectilePrefab);
+            projectilePool = new Pool<ProjectileBase>(m_projectilePrefab);
         }
 
-        private void Start() => pool.AddObjects(5);
+        private void Start() => projectilePool.AddObjects(5);
         public void OnInRangeArea(GameObject observable)
         {
             if(observable.TryGetComponent(out IDamageable damageable))
