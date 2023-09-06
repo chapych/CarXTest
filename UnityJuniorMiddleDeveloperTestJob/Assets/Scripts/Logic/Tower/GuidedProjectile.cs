@@ -1,10 +1,12 @@
-﻿using Logic.Tower.Base;
+﻿using BaseInterfaces.Gameplay;
+using Logic.Tower.Base;
 using UnityEngine;
 
 namespace Logic.Tower
 {
-	public class GuidedProjectile : ProjectileBase
+	public class GuidedProjectile : ProjectileBase, ISpawnableTransform
 	{
+		private GameObject m_target;
 		protected override void Update ()
 		{
 			base.Update();
@@ -13,6 +15,10 @@ namespace Logic.Tower
 				translation = translation.normalized * m_speed;
 			}
 			transform.Translate(translation);
+		}
+		public  void SetMovementTarget(Transform target)
+		{
+			m_target = target.gameObject;
 		}
 	}
 }

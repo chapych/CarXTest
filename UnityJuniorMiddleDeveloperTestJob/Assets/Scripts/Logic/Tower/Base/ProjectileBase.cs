@@ -1,24 +1,25 @@
 ﻿using System;
+using BaseInterfaces;
+using BaseInterfaces.Gameplay;
 using Logic.PoolingSystem;
 using UnityEngine;
 
 namespace Logic.Tower.Base
 {
-    public class ProjectileBase : MonoBehaviour, IPoolable<ProjectileBase>
+    public abstract class ProjectileBase : MonoBehaviour, IPooled
     {
         private TriggerObserver triggerObserver;
         protected float m_speed;
         protected int m_damage;
-        protected IDamageable m_target;
-        public event Action<ProjectileBase> OnFree;
+        public IDamageable Target;
+        public event Action<IPooled> OnFree;
 
-        public void Construct(float speed, int damage, IDamageable target)
+        public void Construct(float speed, int damage)
         {
             m_speed = speed;
             m_damage = damage;
-            m_target = target;
         }
-        
+
         private void Awake()
         {
             triggerObserver = GetComponent<TriggerObserver>();
@@ -27,7 +28,7 @@ namespace Logic.Tower.Base
 
         protected virtual void Update()
         {
-            if (m_target.IsDead())
+            if (Target.IsDead())
             {
                 OnFreeAction(this);
             }
@@ -46,6 +47,11 @@ namespace Logic.Tower.Base
         private void OnDestroy()
         {
             triggerObserver.OnTrigger -= OnTriggerHandle;
+        }
+
+        public void Free()
+        {
+            OnFree?.Invoke(this);
         }
     }
 }

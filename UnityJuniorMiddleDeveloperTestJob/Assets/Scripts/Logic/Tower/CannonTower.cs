@@ -28,7 +28,7 @@ namespace Logic.Tower
 			Vector3 targetRelativePosition = position - m_shootPoint.position;
 			Vector3 targetVelocity = target.GetComponent<Rigidbody>().velocity;
 
-			var solutions = QuadraticSolver.SolveWithParameters(targetVelocity.DoubleMagnitude() - speed * speed,
+			var solutions = QuadraticSolver.SolveWithParameters(targetVelocity.DoubleMagnitude() - Speed * Speed,
 				2 * Vector3.Dot(targetVelocity, targetRelativePosition),
 				targetRelativePosition.DoubleMagnitude());
 
@@ -59,13 +59,13 @@ namespace Logic.Tower
 
 		private void ExtractProjectile(IDamageable target)
 		{
-			ProjectileBase projectile = projectilePool.Get();
-			projectile.Construct(speed, damage, target);
+			CannonProjectile projectile = (CannonProjectile) ProjectilePool.Get();
+			projectile.Target = target;
 
 			Transform projectileTransform = projectile.transform;
 			projectileTransform.position = m_shootPoint.position;
 			projectileTransform.rotation = m_shootPoint.rotation;
-			projectile.GetComponent<Rigidbody>().AddForce(speed * CanonItself.forward, ForceMode.VelocityChange);
+			projectile.SetMovementDirection(CanonItself.forward);
 		}
 	}
 }

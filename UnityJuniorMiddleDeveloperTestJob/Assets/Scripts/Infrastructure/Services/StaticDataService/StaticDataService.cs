@@ -16,6 +16,8 @@ namespace Infrastructure.Services.StaticDataService
         private Dictionary<string, LevelStaticData> levelsByKey;
         private Dictionary<TowerBaseType, TowerBaseStaticData> towerBasesByKey;
         private Dictionary<WeaponType, TowerWeaponStaticData> towerWeaponByKey;
+        private Dictionary<MonsterType, MonsterStaticData> monsterByKey;
+        private Dictionary<ProjectileType, ProjectileStaticData> projectileByKey;
 
         private string staticDataKey = "StaticData";
 
@@ -31,15 +33,25 @@ namespace Infrastructure.Services.StaticDataService
             var levels = await assetProvider.LoadAllByKey<LevelStaticData>(staticDataKey);
             var towerBases = await assetProvider.LoadAllByKey<TowerBaseStaticData>(staticDataKey);
             var towerWeapons = await assetProvider.LoadAllByKey<TowerWeaponStaticData>(staticDataKey);
+            var projectiles = await assetProvider.LoadAllByKey<ProjectileStaticData>(staticDataKey);
+            Debug.Log("smth");
+            var monsters = await assetProvider.LoadAllByKey<MonsterStaticData>(staticDataKey);
 
+            Debug.Log("assetsLoaded");
             levelsByKey = levels.ToDictionary(x => x.LevelName, x => x);
+            Debug.Log("levels finished");
             towerBasesByKey = towerBases.ToDictionary(x => x.Type, x => x);
             towerWeaponByKey = towerWeapons.ToDictionary(x => x.Type, x => x);
+            Debug.Log(monsters.Length);
+            monsterByKey = monsters.ToDictionary(x => x.Type, x => x);
+            projectileByKey = projectiles.ToDictionary(x => x.Type, x => x);
         }
 
         public LevelStaticData ForLevel(string level) => levelsByKey[level];
         public TowerBaseStaticData ForTowerBase(TowerBaseType type) => towerBasesByKey[type];
         public TowerWeaponStaticData ForTowerWeapon(WeaponType type) => towerWeaponByKey[type];
+        public MonsterStaticData ForMonster(MonsterType monsterType) => monsterByKey[monsterType];
+        public ProjectileStaticData ForProjectile(ProjectileType projectileType) => projectileByKey[projectileType];
     }
 }
 

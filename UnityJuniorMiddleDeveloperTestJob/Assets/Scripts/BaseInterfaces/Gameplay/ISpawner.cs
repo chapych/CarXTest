@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-
-namespace BaseInterfaces.Gameplay
+﻿namespace Logic
 {
     public interface ISpawner
     {
-        void Construct(float interval, Vector3 moveTargetPosition, float speed, int maxHP);
         void Spawn();
     }
 }

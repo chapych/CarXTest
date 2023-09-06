@@ -1,33 +1,44 @@
-﻿using Logic.PoolingSystem;
+﻿using System;
+using System.Threading.Tasks;
+using BaseClasses.Enums;
+using Infrastructure.Services.GameFactory;
+using Logic.PoolingSystem;
 using UnityEngine;
 
 namespace Logic.Tower.Base
 {
-    public abstract class TowerBase : MonoBehaviour, IObserverInRange
+    public abstract class TowerBase : MonoBehaviour, IObserverInRange, ISpawner
     {
-        [SerializeField] protected ProjectileBase m_projectilePrefab;
-        protected Pool<ProjectileBase> projectilePool;
-        protected float speed;
-        protected int damage;
+        private ProjectileType projectileType;
+        private IDamageable damageable;
+        protected float Speed;
+        protected int Damage;
 
-        private StopWatch stopWatch;
+        protected Pool ProjectilePool;
+        private int preCreatedNumber = 5;
 
-        public void Construct(float interval, float speed, int damage)
+        public event Action OnMonsterInRangeArea;
+
+        public void Construct(float speed, int damage, IGameFactory factory)
         {
-            stopWatch = new StopWatch(interval);
-            this.speed = speed;
-            this.damage = damage;
+            this.Speed = speed;
+            this.Damage = damage;
 
-            projectilePool = new Pool<ProjectileBase>(m_projectilePrefab);
+            var instantiatingFunction = new Func<Task<GameObject>>(() => factory.CreateProjectile(projectileType));
+            ProjectilePool = new Pool(instantiatingFunction);
         }
 
-        private void Start() => projectilePool.AddObjects(5);
+        private void Start() => ProjectilePool.AddObjects(preCreatedNumber);
+
         public void OnInRangeArea(GameObject observable)
         {
-            if(observable.TryGetComponent(out IDamageable damageable))
-                if(stopWatch.IsTimeForPeriodicAction()) Shoot(damageable);
+            if (observable.TryGetComponent(out IDamageable damageable))
+            {
+                this.damageable = damageable;
+                OnMonsterInRangeArea?.Invoke();
+            }
         }
-
+        public void Spawn() => Shoot(damageable);
         protected abstract void Shoot(IDamageable target);
     }
 }

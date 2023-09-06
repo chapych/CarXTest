@@ -11,5 +11,7 @@ namespace Infrastructure.Services.StaticDataService
         LevelStaticData ForLevel(string level);
         public TowerBaseStaticData ForTowerBase(TowerBaseType type);
         public TowerWeaponStaticData ForTowerWeapon(WeaponType type);
+        MonsterStaticData ForMonster(MonsterType monsterType);
+        ProjectileStaticData ForProjectile(ProjectileType projectileType);
     }
 }

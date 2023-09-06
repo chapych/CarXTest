@@ -21,7 +21,7 @@ namespace Editor
             if (GUILayout.Button("Collect"))
             {
                 levelStaticData.SpawnerPoints = FindObjectsOfType<OnSceneSpawnerPoint>()
-                    .Select(x=> new SpawnerPoint(x.transform.position, x.Interval, x.MoveTarget.transform.position, x.Speed, x.MaxHp))
+                    .Select(x=> new SpawnerPoint(x.transform.position, x.Interval, x.MoveTarget.transform.position))
                     .ToList();
                 levelStaticData.TowerPoints = FindObjectsOfType<OnSceneTowerPoint>()
                     .Select(x => new TowerPoint(x.transform.position, x.TowerBaseType, x.WeaponType, x.Range, x.ShootInterval))

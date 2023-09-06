@@ -1,48 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Logic.PoolingSystem
 {
-    public class Pool<T> where T : MonoBehaviour, IPoolable<T>
+    public class Pool
     {
-        private readonly T prefab;
+        private readonly Func<Task<GameObject>> instantiatingAsyncFunc;
 
-        private Queue<T> queue = new Queue<T>();
+        private Queue<IPooled> queue = new Queue<IPooled>();
 
-        public Pool(T prefab)
+        public Pool(Func<Task<GameObject>> instantiatingAsyncFunc)
         {
-            this.prefab = prefab;
+            this.instantiatingAsyncFunc = instantiatingAsyncFunc;
         }
 
-        public T Get()
+        public IPooled Get()
         {
             if (queue.Count == 0) AddObjects(1);
 
-            T instance = queue.Dequeue();
+            IPooled instance = queue.Dequeue();
             instance.gameObject.SetActive(true);
             return instance;
         }
 
-        public void ReturnToPool(T instance)
+        public void ReturnToPool(IPooled instance)
         {
             instance.gameObject.SetActive(false);
             queue.Enqueue(instance);
         }
 
-        public void AddObjects(int count)
+        public async void AddObjects(int count)
         {
             for (int i = 0; i < count; i++)
             {
-                T instance = Object.Instantiate(prefab);
-                ReturnToPool(instance);
+                GameObject instance = await instantiatingAsyncFunc();
+                ReturnToPool(instance.GetComponent<IPooled>());
 
-                instance.GetComponent<IPoolable<T>>().OnFree += ReturnToPool;
+                instance.GetComponent<IPooled>().OnFree += ReturnToPool;
             }
         }
 
         public void CleanUp()
         {
-            foreach (IPoolable<T> poolable in queue)
+            foreach (IPooled poolable in queue)
             {
                 poolable.OnFree -= ReturnToPool;
             }

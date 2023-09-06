@@ -1,4 +1,5 @@
-﻿using Logic.Tower;
+﻿using BaseInterfaces.Gameplay;
+using Logic.Tower;
 using Logic.Tower.Base;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
@@ -9,12 +10,9 @@ namespace Logic
 	{
 		protected override void Shoot(IDamageable target)
 		{
-			// GameObject projectile =
-			// 	Instantiate(m_projectilePrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
-			// var projectileBeh = projectile.GetComponent<GuidedProjectile>();
-			var projectile = projectilePool.Get() as GuidedProjectile;
+			var projectile = (GuidedProjectile) ProjectilePool.Get();
 			projectile.transform.position = transform.position + Vector3.up * 1.5f;
-			projectile.Construct(speed, damage, target);
+			projectile.SetMovementTarget(target.transform);
 		}
 	}
 }

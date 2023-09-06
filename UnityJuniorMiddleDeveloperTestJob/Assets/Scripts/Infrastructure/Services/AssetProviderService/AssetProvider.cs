@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -32,7 +33,6 @@ namespace Infrastructure.Services.AssetProviderService
                 return asyncHandle.Result as T;
 
             var handle = Addressables.LoadAssetAsync<T>(address);
-
             return await LoadAssetWIthCashed(address, handle);
         }
 
@@ -41,7 +41,6 @@ namespace Infrastructure.Services.AssetProviderService
             var locations = await GetResourceLocations(label);
             var toLoad = locations.Where(x=>x.ResourceType == typeof(T))
                 .Select(x => Load<T>(x.PrimaryKey));
-
             return await Task.WhenAll(toLoad);
         }
 

@@ -1,5 +1,4 @@
 ﻿using BaseClasses.Enums;
-using Infrastructure.Services.StaticData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
